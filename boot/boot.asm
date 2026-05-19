@@ -16,9 +16,13 @@ section .text
 global _start
 _start:
     mov esp, stack_top
+    push ebx        ; multiboot info pointer
+    push eax        ; multiboot magic
     extern kernel_main
     call kernel_main
 .hang:
     cli
     hlt
     jmp .hang
+
+; For frame buffer mode go to guiboot.asm
