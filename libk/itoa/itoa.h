@@ -1,0 +1,1 @@
+void itoa(int value, char* buffer);
