@@ -1,4 +1,4 @@
-#include "../../drivers/VGA/VGA.h"
+#include "../../drivers/Serial/URAT.h"
 
 
 void kprintf(const char* fmt, ...)
@@ -15,7 +15,7 @@ void kprintf(const char* fmt, ...)
             {
                 char* s = *(char**)arg;
                 arg += sizeof(char*);
-                terminal_print(s);
+                serial_write(s);
             }
             else if (fmt[i] == 'd')
             {
@@ -24,7 +24,7 @@ void kprintf(const char* fmt, ...)
 
                 char buf[32];
                 itoa(val, buf);
-                terminal_print(buf);
+                serial_write(buf);
             }
             else if (fmt[i] == 'x')
             {
@@ -33,12 +33,12 @@ void kprintf(const char* fmt, ...)
 
                 char buf[32];
                 itoa(val, buf); // later replace with hex version
-                terminal_print(buf);
+                serial_write(buf);
             }
         }
         else
         {
-            terminal_putchar(fmt[i]);
+            serial_write_char(fmt[i]);
         }
     }
 }

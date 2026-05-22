@@ -12,14 +12,14 @@ ISO_DIR = isodir
 LIMINE_DIR = limine
 
 # all object files
-OBJS = boot/boot.o \
+OBJS = boot/guiboot.o \
        kernel/kernel.o \
        gdt/gdt_load.o \
        gdt/gdt.o \
        idt/idt_load.o \
        idt/idt.o \
        drivers/keyboard/keyboard.o \
-       drivers/VGA/VGA.o \
+       drivers/Serial/URAT.o \
        memory/pmm/pmm.o \
        memory/heap/heap.o \
        libk/itoa/itoa.o \
@@ -85,7 +85,7 @@ run-iso: $(ISO)
 
 # Run with debug output on serial port (very useful)
 run-debug: $(TARGET)
-	qemu-system-i386 -kernel $(TARGET) -serial stdio -d int -no-reboot
+	qemu-system-i386 -kernel $(TARGET) -serial file:log.txt
 
 # -----------------------------------------------------------------------
 # Clean

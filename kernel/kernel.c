@@ -2,7 +2,6 @@
 #include <stddef.h> 
 #include <stdarg.h>
 
-#include "../drivers/VGA/VGA.h"
 #include "../gdt/gdt.h" // GDT table access
 #include "../idt/idt.h" // IDT access
 #include "../memory/pmm/pmm.h"
@@ -13,11 +12,15 @@
 // External helper libraries
 #include "../libk/kprintf/kprintf.h"
 
-
-
+#include "../drivers/Serial/URAT.h"
 
 extern uint32_t kernel_end;
 
+
+static uint32_t* framebuffer;
+static uint32_t fb_width;
+static uint32_t fb_height;
+static uint32_t fb_pitch;
 
 // Multiboot1 info struct (just the parts we need)
 typedef struct {
@@ -59,43 +62,40 @@ typedef struct {
  *   - Interrupts are disabled
  *   - No standard library exists — we're on our own
  * ------------------------------------------------------------------------- */
-void kernel_main(void) {
-    
-    // Initalize things
+
+static void put_pixel(int x, int y, uint32_t color) {
+    framebuffer[y * (fb_pitch / 4) + x] = color;
+}
+
+void draw_rect(int x, int y, int w, int h, uint32_t color) {
+    for (int yy = y; yy < y + h; yy++) {
+        for (int xx = x; xx < x + w; xx++) {
+            put_pixel(xx, yy, color);
+        }
+    }
+}
+
+void kernel_main(uint32_t magic, multiboot_info_t* mbi) {
+
+    serial_init();
+    int i = 24743;
+    kprintf("Hello World %d", i);
+
     pmm_init((uint32_t)&kernel_end);
     heap_init(0x01000000, 1024 * 1024);
+
     gdt_init();
-    terminal_init();
     idt_init();
-    keyboard_init();
 
-    // Main
-    kprintf("======== HEAP TEST ========\n");
+    framebuffer = (uint32_t*)(uint32_t)mbi->framebuffer_addr;
 
-    int *a = kmalloc(4); // Allocate 4 bytes at the address pointed
+    fb_width = mbi->framebuffer_width;
+    fb_height = mbi->framebuffer_height;
+    fb_pitch = mbi->framebuffer_pitch;
 
-    *a = 111; // Write data onto the allocated address
+    draw_rect(100, 100, 300, 200, 0xFF0000);
 
-
-    kprintf("a=%x\n", a);
-
-    kprintf("write test passed\n");
-
-    kfree(a);
-
-    int *d = kmalloc(4);
-    kprintf("d=%x\n", d);
-    kprintf("MEMORY FREEING TEST PASSED!\n");
-
-    kprintf("=== SPLIT TEST ===\n");
-
-    int* e = kmalloc(32);
-    int* f = kmalloc(8);
-
-    kprintf("a=%x b=%x\n", e, f);
-
-    kprintf("===== TOTAL SPACE LEFT =====\n");
-    kprintf("SIZE = %d", heap_get_memory());
-
-    while(1) {}
+    while (1) {
+        __asm__ volatile ("hlt");
+    }
 }
