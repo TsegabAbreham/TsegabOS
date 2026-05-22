@@ -87,7 +87,5 @@ void isr_handler(uint32_t int_number) {
     char msg[] = "INT: xx\n";
     msg[5] = '0' + ((int_number / 10) % 10);
     msg[6] = '0' + (int_number % 10);
-    terminal_print(msg);
-    terminal_print("GPF hit\n");
     while(1){}
 }

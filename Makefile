@@ -20,10 +20,12 @@ OBJS = boot/guiboot.o \
        idt/idt.o \
        drivers/keyboard/keyboard.o \
        drivers/Serial/URAT.o \
+	   drivers/Serial/libk/itoa/itoa.o \
+       drivers/Serial/libk/kprintf/kprintf.o \
        memory/pmm/pmm.o \
        memory/heap/heap.o \
-       libk/itoa/itoa.o \
-       libk/kprintf/kprintf.o
+	   GUI/fb/framebuffer.o \
+	   GUI/shapes/shapes.o
 
 all: $(TARGET)
 

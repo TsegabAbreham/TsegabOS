@@ -138,7 +138,10 @@ void keyboard_handler(void) {
     
     // Backspace
     if (scancode == 0x0E){
+        /*
+        Find another way of outputting
         terminal_backspace();
+        */
         outb(0x20, 0x20);
         return;    
     }
@@ -159,8 +162,13 @@ void keyboard_handler(void) {
         if (shift_pressed && c >= '1' && c <= '9') {
             c = c - 32;   // ASCII lowercase to uppercase
         }
+        /*
+        Find another way of using the keyboard driver since VGA is not supported anymore
         terminal_putchar(c);
-    }
+        */
+
+        }
+
     
 
     outb(0x20, 0x20);

@@ -9,6 +9,8 @@
 // Drivers
 #include "../drivers/keyboard/keyboard.h"
 
+// GUI 
+#include "../GUI/fb/framebuffer.h"
 // External helper libraries
 #include "../libk/kprintf/kprintf.h"
 
@@ -17,10 +19,15 @@
 extern uint32_t kernel_end;
 
 
+// Framebuffer
 static uint32_t* framebuffer;
 static uint32_t fb_width;
 static uint32_t fb_height;
 static uint32_t fb_pitch;
+
+// Memory Mapping
+static uint32_t mmaplength;
+
 
 // Multiboot1 info struct (just the parts we need)
 typedef struct {
@@ -63,23 +70,10 @@ typedef struct {
  *   - No standard library exists — we're on our own
  * ------------------------------------------------------------------------- */
 
-static void put_pixel(int x, int y, uint32_t color) {
-    framebuffer[y * (fb_pitch / 4) + x] = color;
-}
-
-void draw_rect(int x, int y, int w, int h, uint32_t color) {
-    for (int yy = y; yy < y + h; yy++) {
-        for (int xx = x; xx < x + w; xx++) {
-            put_pixel(xx, yy, color);
-        }
-    }
-}
-
 void kernel_main(uint32_t magic, multiboot_info_t* mbi) {
 
     serial_init();
-    int i = 24743;
-    kprintf("Hello World %d", i);
+    
 
     pmm_init((uint32_t)&kernel_end);
     heap_init(0x01000000, 1024 * 1024);
@@ -93,7 +87,14 @@ void kernel_main(uint32_t magic, multiboot_info_t* mbi) {
     fb_height = mbi->framebuffer_height;
     fb_pitch = mbi->framebuffer_pitch;
 
-    draw_rect(100, 100, 300, 200, 0xFF0000);
+    kprintf("Width: %d\n", (int)fb_width);
+
+    framebuffer_init(
+        framebuffer, fb_width, fb_height, fb_pitch
+    );
+
+    draw_rect(70, 420, 300, 200, 0x990000);
+    draw_rect(100, 400, 300, 200, 0xFF0000);
 
     while (1) {
         __asm__ volatile ("hlt");
