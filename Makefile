@@ -20,6 +20,7 @@ OBJS = boot/guiboot.o \
        idt/idt.o \
        drivers/keyboard/keyboard.o \
        drivers/Serial/URAT.o \
+	   drivers/mouse/mouse.o \
 	   drivers/Serial/libk/itoa/itoa.o \
        drivers/Serial/libk/kprintf/kprintf.o \
        memory/pmm/pmm.o \

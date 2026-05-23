@@ -1,4 +1,5 @@
 #include "idt.h"
+#include "../drivers/Serial/libk/kprintf/kprintf.h"
 #include "../drivers/keyboard/keyboard.h"
 
 #define IDT_ARRAY 256
@@ -14,7 +15,6 @@ extern void irq0_stub(void);
 extern void irq1_stub(void);
 
 extern void idt_load(uint32_t);
-extern void terminal_print(const char* str);
 extern void keyboard_handler(void);
 
 // port I/O helper functions — x86 specific instructions
@@ -67,6 +67,7 @@ void idt_init(void) {
     idt_set_entry(14, (uint32_t)isr14_stub, 0x08, 0x8E);  // page fault
     idt_set_entry(32, (uint32_t)irq0_stub, 0x08, 0x8E);  // timer
     idt_set_entry(33, (uint32_t)irq1_stub,  0x08, 0x8E);  // keyboard
+    
     // load the IDT
     idtr.size   = (sizeof(idt_entry_t) * 256) - 1;
     idtr.offset = (uint32_t)idt;
@@ -87,5 +88,7 @@ void isr_handler(uint32_t int_number) {
     char msg[] = "INT: xx\n";
     msg[5] = '0' + ((int_number / 10) % 10);
     msg[6] = '0' + (int_number % 10);
+
+    kprintf("%s", msg);
     while(1){}
 }

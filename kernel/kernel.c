@@ -8,11 +8,11 @@
 #include "../memory/heap/heap.h"
 // Drivers
 #include "../drivers/keyboard/keyboard.h"
-
+#include "../drivers/mouse/mouse.h"
 // GUI 
 #include "../GUI/fb/framebuffer.h"
 // External helper libraries
-#include "../libk/kprintf/kprintf.h"
+#include "../drivers/Serial/libk/kprintf/kprintf.h"
 
 #include "../drivers/Serial/URAT.h"
 
@@ -27,6 +27,7 @@ static uint32_t fb_pitch;
 
 // Memory Mapping
 static uint32_t mmaplength;
+
 
 
 // Multiboot1 info struct (just the parts we need)
@@ -71,15 +72,7 @@ typedef struct {
  * ------------------------------------------------------------------------- */
 
 void kernel_main(uint32_t magic, multiboot_info_t* mbi) {
-
-    serial_init();
     
-
-    pmm_init((uint32_t)&kernel_end);
-    heap_init(0x01000000, 1024 * 1024);
-
-    gdt_init();
-    idt_init();
 
     framebuffer = (uint32_t*)(uint32_t)mbi->framebuffer_addr;
 
@@ -87,16 +80,23 @@ void kernel_main(uint32_t magic, multiboot_info_t* mbi) {
     fb_height = mbi->framebuffer_height;
     fb_pitch = mbi->framebuffer_pitch;
 
-    kprintf("Width: %d\n", (int)fb_width);
+    //kprintf("Width: %d\n", (int)fb_width);
 
     framebuffer_init(
         framebuffer, fb_width, fb_height, fb_pitch
     );
 
-    draw_rect(70, 420, 300, 200, 0x990000);
-    draw_rect(100, 400, 300, 200, 0xFF0000);
+    clear_screen(0x202020);
+    mouse_init();
+    pmm_init((uint32_t)&kernel_end);
+    heap_init(0x01000000, 1024 * 1024);
+    serial_init();
+    gdt_init();
+    idt_init();
+    
+    mouse_update(fb_width, fb_height);
 
     while (1) {
-        __asm__ volatile ("hlt");
+        
     }
 }
