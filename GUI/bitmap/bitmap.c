@@ -57,6 +57,8 @@ bitmap_t load_bmp(const uint8_t* data)
     return result;
 }
 
+#define TRANSPARENT_IGNORED_COLOR 0xA011A0
+
 void draw_bitmap(int x, int y, bitmap_t* bmp)
 {
     for (int j = 0; j < bmp->height; j++)
@@ -64,7 +66,12 @@ void draw_bitmap(int x, int y, bitmap_t* bmp)
         for (int i = 0; i < bmp->width; i++)
         {
             uint32_t color = bmp->pixels[j * bmp->width + i];
-            put_pixel(x + i, y + j, color);
+
+            if ((color & 0x00FFFFFF) == TRANSPARENT_IGNORED_COLOR)
+                continue;
+
+            
+            put_pixel(x + i, y + j, color & 0x00FFFFFF);
         }
     }
 }

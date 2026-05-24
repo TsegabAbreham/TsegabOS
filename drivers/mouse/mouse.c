@@ -189,7 +189,7 @@ void mouse_render(void) {
     if (mouse_x == prev_x && mouse_y == prev_y)
         return;
     
-    draw_rect(prev_x, prev_y, 16, 16, 0x202020);
+    draw_rect(prev_x, prev_y, 24, 24, 0x202020);
     draw_bitmap(mouse_x, mouse_y, &cursor);
 
     prev_x = mouse_x;
