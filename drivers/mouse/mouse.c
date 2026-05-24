@@ -1,11 +1,20 @@
 #include <stdint.h>
-#include "../../drivers/Serial/libk/kprintf/kprintf.h"
+
 #include "../../GUI/shapes/shapes.h"
+#include "../../GUI/bitmap/bitmap.h"
+#include "../../drivers/Serial/libk/kprintf/kprintf.h"
 
 static int mouse_x = 200;
 static int mouse_y = 200;
+
 static int prev_x = 200;
 static int prev_y = 200;
+
+static uint32_t screen_width;
+static uint32_t screen_height;
+
+static uint8_t mouse_cycle = 0;
+static uint8_t mouse_packet[3];
 
 static inline void outb(uint16_t port, uint8_t val) {
     __asm__ volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
@@ -17,16 +26,18 @@ static inline uint8_t inb(uint16_t port) {
     return ret;
 }
 
-
 static void mouse_wait(uint8_t type) {
     uint32_t timeout = 100000;
 
     if (type == 0) {
+
         while (timeout--) {
             if (inb(0x64) & 1)
                 return;
         }
+
     } else {
+
         while (timeout--) {
             if (!(inb(0x64) & 2))
                 return;
@@ -36,8 +47,11 @@ static void mouse_wait(uint8_t type) {
 
 static void mouse_write(uint8_t data) {
     mouse_wait(1);
+
     outb(0x64, 0xD4);
+
     mouse_wait(1);
+
     outb(0x60, data);
 }
 
@@ -46,78 +60,138 @@ static uint8_t mouse_read(void) {
     return inb(0x60);
 }
 
-void mouse_init(void) {
+extern uint8_t _binary_GUI_bitmap_bitmaps_Cursor_bmp_start[];
+static bitmap_t cursor;
+
+void mouse_init(uint32_t fb_width, uint32_t fb_height) {
+
+    screen_width  = fb_width;
+    screen_height = fb_height;
+
     uint8_t status;
 
+    // enable auxiliary device
     mouse_wait(1);
-    outb(0x64, 0xA8);          // enable auxiliary mouse device
+    outb(0x64, 0xA8);
 
+    // read command byte
     mouse_wait(1);
-    outb(0x64, 0x20);          // read controller command byte
+    outb(0x64, 0x20);
+
     mouse_wait(0);
     status = inb(0x60);
 
-    status |= 0x02;            // enable IRQ12 bit in command byte
+    // enable IRQ12
+    status |= 0x02;
 
+    // write command byte back
     mouse_wait(1);
-    outb(0x64, 0x60);          // write command byte
+    outb(0x64, 0x60);
+
     mouse_wait(1);
     outb(0x60, status);
 
-    mouse_write(0xF4);         // enable data reporting
-    (void)mouse_read();        // consume ACK
+    cursor = load_bmp(_binary_GUI_bitmap_bitmaps_Cursor_bmp_start);
+
+    // enable packet streaming
+    mouse_write(0xF4);
+
+    // ACK
+    mouse_read();
+
 }
 
-static uint8_t mouse_cycle = 0;
-static uint8_t mouse_packet[3];
+static uint8_t right_down = 0;
+static uint8_t middle_down = 0;
+static uint8_t left_down = 0;
 
-static void mouse_process_byte(uint8_t data, uint32_t fb_width, uint32_t fb_height) {
+void mouse_process_byte(uint8_t data) {
+
     if (mouse_cycle == 0 && !(data & 0x08)) {
         return;
     }
 
     mouse_packet[mouse_cycle++] = data;
 
-    if (mouse_cycle == 3) {
-        mouse_cycle = 0;
+    if (mouse_cycle < 3)
+        return;
 
-        int dx = (int8_t)mouse_packet[1];
-        int dy = (int8_t)mouse_packet[2];
+    mouse_cycle = 0;
 
-        mouse_x += dx;
-        mouse_y -= dy;
+    int dx = (int8_t)mouse_packet[1];
+    int dy = (int8_t)mouse_packet[2];
 
-        if (mouse_x < 0) mouse_x = 0;
-        if (mouse_y < 0) mouse_y = 0;
-        if (mouse_x > (int)fb_width - 50) mouse_x = (int)fb_width - 50;
-        if (mouse_y > (int)fb_height - 50) mouse_y = (int)fb_height - 50;
+    mouse_x += dx;
+    mouse_y -= dy;
+
+    // BUTTONS
+    uint8_t buttons = mouse_packet[0];
+
+    if (buttons & 0x01) {
+        if (!left_down) {
+            kprintf("Left click down\n");
+        }
+        left_down = 1;
+    } else {
+        if (left_down) {
+            kprintf("Left click up\n");
+        }
+        left_down = 0;
     }
+
+    if (buttons & 0x02){
+        if (!right_down) {
+            kprintf("Right click down\n");
+        }
+        right_down = 1;
+    } else {
+        if (right_down) {
+            kprintf("Right click up\n");
+        }
+        right_down = 0;
+    }
+
+    if (buttons & 0x04){
+        if (!middle_down) {
+            kprintf("Middle click down\n");
+        }
+        middle_down = 1;
+    } else {
+        if (middle_down) {
+            kprintf("Middle click up\n");
+        }
+        middle_down = 0;
+    }
+
+
+
+}
+
+void mouse_handler(void) {
+
+    uint8_t status = inb(0x64);
+
+    if (!(status & 1))
+        return;
+
+    if (!(status & 0x20))
+        return;
+
+    uint8_t data = inb(0x60);
+
+    mouse_process_byte(data);
 }
 
 
-void mouse_poll(uint32_t fb_width, uint32_t fb_height) {
-    while (inb(0x64) & 1) {
-        uint8_t status = inb(0x64);
-        uint8_t data = inb(0x60);
 
-        if (status & 0x20) {
-            mouse_process_byte(data, fb_width, fb_height);
-            kprintf(" %d \n", (int)data);
-        }
+void mouse_render(void) {
 
-    }
-}
+    if (mouse_x == prev_x && mouse_y == prev_y)
+        return;
+    
+    draw_rect(prev_x, prev_y, 16, 16, 0x202020);
+    draw_bitmap(mouse_x, mouse_y, &cursor);
 
-void mouse_update(uint32_t fb_width, uint32_t fb_height){
-    draw_circle(mouse_x, mouse_y, 10, 0xFF0000);
-    while (1) {
-        mouse_poll(fb_width, fb_height);
-
-        if (mouse_x != prev_x || mouse_y != prev_y) {
-            draw_circle(prev_x, prev_y, 10, 0x202020);
-            draw_circle(mouse_x, mouse_y, 10, 0xFF0000);
-            prev_x = mouse_x;
-            prev_y = mouse_y;
-        }
-    }
+    prev_x = mouse_x;
+    prev_y = mouse_y;
 }

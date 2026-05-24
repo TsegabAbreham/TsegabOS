@@ -12,7 +12,7 @@ ISO_DIR = isodir
 LIMINE_DIR = limine
 
 # all object files
-OBJS = boot/guiboot.o \
+OBJS = boot/boot.o \
        kernel/kernel.o \
        gdt/gdt_load.o \
        gdt/gdt.o \
@@ -26,7 +26,9 @@ OBJS = boot/guiboot.o \
        memory/pmm/pmm.o \
        memory/heap/heap.o \
 	   GUI/fb/framebuffer.o \
-	   GUI/shapes/shapes.o
+	   GUI/shapes/shapes.o \
+	   GUI/bitmap/bitmap.o \
+	   GUI/bitmap/bitmaps/cursor.o
 
 all: $(TARGET)
 

@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-void heap_init(uint32_t start, uint32_t size);
+void heap_init();
 
 typedef struct block_header
 {
@@ -13,4 +13,5 @@ typedef struct block_header
 
 void* kmalloc(size_t size);
 void kfree(void* ptr);
+void* memcpy(void* dest, const void* src, size_t n);
 size_t heap_get_memory();

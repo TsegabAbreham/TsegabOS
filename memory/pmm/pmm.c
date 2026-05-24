@@ -1,4 +1,5 @@
 #include "pmm.h"
+#include "../../kernel/multiboot.h"
 
 static uint8_t page_bitmap[MAX_PAGES / 8];
 
@@ -47,21 +48,40 @@ static int find_free_page(){
 
 
 // Initalize PMM
-void pmm_init(uint32_t kernel_end){
-    // Mark everything as free space at beginning
-    
-    /* However this line is FLAWED meaning it doesn't consider spaces for VGA memory or low memory (BIOS AREA) 
-    assumes everything is free at boot*/
+void pmm_init(uint32_t kernel_end, multiboot_info_t* mbi){
+    // Mark everything as used first
     for (uint32_t i = 0; i < MAX_PAGES; i++){
-        clear_bit(i);
-    }
-
-    // Reserve some for kernel memory
-    uint32_t end_page = addr_to_page(kernel_end);
-
-    for (uint32_t i =0; i < end_page; i++){
         set_bit(i);
     }
+
+    // Parse Memory Map given from Multiboot
+    multiboot_mmap_entry_t *entry = (multiboot_mmap_entry_t*)mbi -> mmap_addr;
+
+    uint32_t end =  mbi->mmap_addr + mbi->mmap_length;
+
+    while ((uint32_t)entry < end){
+        if (entry->type == 1) { // Usuable RAM
+            uint32_t start = (uint32_t)(entry->addr);
+            uint32_t size = (uint32_t)(entry->len);
+
+            uint32_t start_page = addr_to_page(start);
+            uint32_t end_page = addr_to_page(start+size);
+
+            for (uint32_t i = start_page; i < end_page; i++){
+                clear_bit(i);
+            }
+        }
+
+        entry = (multiboot_mmap_entry_t*)((uint32_t)entry + entry->size + sizeof(entry->size));
+    }
+
+    // Reserve kernel memory
+    uint32_t kernel_end_page = addr_to_page(kernel_end);
+
+    for (uint32_t i = 0; i <kernel_end_page; i++){
+        set_bit(i);
+    }
+
 
 }
 

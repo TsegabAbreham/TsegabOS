@@ -6,6 +6,8 @@ global isr14_stub
 
 global irq0_stub
 global irq1_stub
+global irq2_stub
+global irq12_stub
 
 extern isr_handler
 
@@ -40,7 +42,14 @@ irq1_stub: ; Keyboard hardware interrupt
     cli
     push 0
     push 33
-    jmp isr_common    
+    jmp isr_common
+
+
+irq12_stub:
+    cli
+    push 0
+    push 44
+    jmp isr_common
 
 ; --- shared handler ---
 isr_common:
