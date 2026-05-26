@@ -90,19 +90,6 @@ void kfree(void *ptr){
     block->free = 1;
 }
 
-// Memory Copy
-void* memcpy(void* dest, const void* src, size_t n) {
-    uint8_t* d = dest;
-    const uint8_t* s = src;
-
-    for (size_t i = 0; i < n; i++) {
-        d[i] = s[i];
-    }
-
-    return dest;
-}
-
-
 
 // Debugging tools
 
