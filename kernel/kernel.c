@@ -17,6 +17,8 @@
 #include "../drivers/Serial/URAT.h"
 
 #include "../external/external/lvgl/lvgl.h"
+#include "../GUI/lvgl_manager/init_lvgl.h"
+
 
 extern uint32_t kernel_end;
 
@@ -28,34 +30,22 @@ static uint32_t fb_width;
 static uint32_t fb_height;
 static uint32_t fb_pitch;
 
-// --------------------------------------------------
-// LVGL BUFFER
-// --------------------------------------------------
-static uint32_t lvgl_buf[800 * 50];
+void INIT_FRAMEBUFFER(multiboot_info_t* mbi) {
+    framebuffer =
+    (uint32_t*)(uint32_t)mbi->framebuffer_addr;
 
-// --------------------------------------------------
-// LVGL FLUSH
-// --------------------------------------------------
-void lvgl_flush(lv_display_t *disp,
-                const lv_area_t *area,
-                uint8_t *px_map)
-{
-    uint32_t *src = (uint32_t*)px_map;
+    fb_width  = mbi->framebuffer_width;
+    fb_height = mbi->framebuffer_height;
 
-    for(int y = area->y1; y <= area->y2; y++)
-    {
-        uint32_t *dst =
-            framebuffer +
-            y * fb_pitch +
-            area->x1;
+    fb_pitch  = mbi->framebuffer_pitch / 4;
 
-        for(int x = area->x1; x <= area->x2; x++)
-        {
-            *dst++ = *src++;
-        }
-    }
+    framebuffer_init(
+        framebuffer,
+        fb_width,
+        fb_height,
+        fb_pitch
+    );
 
-    lv_display_flush_ready(disp);
 }
 
 // --------------------------------------------------
@@ -106,48 +96,16 @@ void kernel_main(uint32_t magic,
     // --------------------------------------------------
     // FRAMEBUFFER INIT
     // --------------------------------------------------
-    framebuffer =
-        (uint32_t*)(uint32_t)mbi->framebuffer_addr;
-
-    fb_width  = mbi->framebuffer_width;
-    fb_height = mbi->framebuffer_height;
-
-    fb_pitch  = mbi->framebuffer_pitch / 4;
-
-    framebuffer_init(
-        framebuffer,
-        fb_width,
-        fb_height,
-        fb_pitch
-    );
-
+    INIT_FRAMEBUFFER(mbi);
     clear_screen(0x202020);
+
+    // LVGL INIT
+    LVGL_INIT(framebuffer, fb_width, fb_height, fb_pitch);
 
     // --------------------------------------------------
     // MOUSE INIT
     // --------------------------------------------------
     mouse_init(fb_width, fb_height);
-
-    // --------------------------------------------------
-    // LVGL INIT
-    // --------------------------------------------------
-    lv_init();
-
-    lv_display_t *disp =
-        lv_display_create(fb_width, fb_height);
-
-    lv_display_set_buffers(
-        disp,
-        lvgl_buf,
-        NULL,
-        sizeof(lvgl_buf),
-        LV_DISPLAY_RENDER_MODE_PARTIAL
-    );
-
-    lv_display_set_flush_cb(
-        disp,
-        lvgl_flush
-    );
 
     // --------------------------------------------------
     // INPUT DEVICE

@@ -19,9 +19,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79b01f66-c468-4cbc-9d73-c9a831550010" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/GUI/fb/framebuffer.c" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/fb/framebuffer.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/fb/framebuffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/fb/framebuffer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/fb/framebuffer.o" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/fb/framebuffer.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI/shapes/shapes.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI/shapes/shapes.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI/shapes/shapes.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/external/external/lvgl" beforeDir="false" afterPath="$PROJECT_DIR$/external/external/lvgl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/config/lv_conf_internal.h" beforeDir="false" afterPath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/config/lv_conf_internal.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/stdlib/lv_sprintf.h" beforeDir="false" afterPath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/stdlib/lv_sprintf.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isodir/kernel.elf" beforeDir="false" afterPath="$PROJECT_DIR$/isodir/kernel.elf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kernel/kernel.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/kernel.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kernel/kernel.o" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/kernel.o" afterDir="false" />
@@ -120,6 +128,13 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RunManager">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
   </component>
@@ -132,6 +147,7 @@
       <updated>1779718926005</updated>
       <workItem from="1779718928461" duration="2761000" />
       <workItem from="1779793825384" duration="567000" />
+      <workItem from="1779818114830" duration="1190000" />
     </task>
     <servers />
   </component>

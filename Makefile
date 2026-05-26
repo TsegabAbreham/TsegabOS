@@ -36,8 +36,13 @@ drivers/Serial/libk/kprintf/kprintf.o \
 memory/pmm/pmm.o \
 memory/heap/heap.o \
 GUI/fb/framebuffer.o \
-GUI/shapes/shapes.o \
 GUI/bitmap/bitmap.o \
+GUI/lvgl_manager/init_lvgl.o
+
+# ---------------------------------------------------------
+# Bitmap image OBJECTS
+# ---------------------------------------------------------
+BMP_OBJS = \
 GUI/bitmap/bitmaps/cursor.o
 
 
@@ -56,6 +61,7 @@ LVGL_SRC = $(wildcard external/external/lvgl/src/*.c) \
 LVGL_OBJS = $(LVGL_SRC:.c=.o)
 
 OBJS += $(LVGL_OBJS)
+OBJS += $(BMP_OBJS)
 
 
 # -------------------------------------------------------
