@@ -1,6 +1,5 @@
 #include <stdint.h>
 
-#include "../../GUI/shapes/shapes.h"
 #include "../../GUI/bitmap/bitmap.h"
 #include "../../drivers/Serial/libk/kprintf/kprintf.h"
 

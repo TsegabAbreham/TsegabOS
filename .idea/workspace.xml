@@ -19,20 +19,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79b01f66-c468-4cbc-9d73-c9a831550010" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/shapes/shapes.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/shapes/shapes.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/shapes/shapes.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI/UI/UI.c" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/UI/UI.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI/UI/UI.h" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/UI/UI.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drivers/Serial/libk/kprintf/kprintf.c" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/Serial/libk/kprintf/kprintf.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drivers/Serial/libk/kprintf/kprintf.o" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/Serial/libk/kprintf/kprintf.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drivers/Serial/libk/tools/tools.c" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/Serial/libk/tools/tools.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drivers/Serial/libk/tools/tools.h" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/Serial/libk/tools/tools.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drivers/mouse/mouse.c" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/mouse/mouse.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/external/external/lvgl" beforeDir="false" afterPath="$PROJECT_DIR$/external/external/lvgl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/config/lv_conf_internal.h" beforeDir="false" afterPath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/config/lv_conf_internal.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/stdlib/lv_sprintf.h" beforeDir="false" afterPath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/stdlib/lv_sprintf.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/idt/idt.c" beforeDir="false" afterPath="$PROJECT_DIR$/idt/idt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/idt/idt.o" beforeDir="false" afterPath="$PROJECT_DIR$/idt/idt.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isodir/kernel.elf" beforeDir="false" afterPath="$PROJECT_DIR$/isodir/kernel.elf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kernel/kernel.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/kernel.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kernel/kernel.o" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/kernel.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/memory/heap/heap.c" beforeDir="false" afterPath="$PROJECT_DIR$/memory/heap/heap.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/memory/heap/heap.h" beforeDir="false" afterPath="$PROJECT_DIR$/memory/heap/heap.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/memory/heap/heap.o" beforeDir="false" afterPath="$PROJECT_DIR$/memory/heap/heap.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/memory/pmm/pmm.c" beforeDir="false" afterPath="$PROJECT_DIR$/memory/pmm/pmm.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myos.elf" beforeDir="false" afterPath="$PROJECT_DIR$/myos.elf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myos.iso" beforeDir="false" afterPath="$PROJECT_DIR$/myos.iso" afterDir="false" />
     </list>
@@ -105,6 +112,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Makefile Target.run-iso.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -134,6 +142,23 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="run-iso" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="run-iso" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <configuration name="run-iso" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="run-iso" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Makefile Target.run-iso" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
@@ -147,7 +172,11 @@
       <updated>1779718926005</updated>
       <workItem from="1779718928461" duration="2761000" />
       <workItem from="1779793825384" duration="567000" />
-      <workItem from="1779818114830" duration="1190000" />
+      <workItem from="1779818114830" duration="3101000" />
+      <workItem from="1779868096683" duration="1808000" />
+      <workItem from="1779879527715" duration="7717000" />
+      <workItem from="1779904014815" duration="7131000" />
+      <workItem from="1779989082545" duration="520000" />
     </task>
     <servers />
   </component>

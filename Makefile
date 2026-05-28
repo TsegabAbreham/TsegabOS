@@ -22,28 +22,32 @@ LIMINE_DIR = limine
 # CORE OS OBJECTS
 # -------------------------------------------------------
 OBJS = \
-boot/boot.o \
-kernel/kernel.o \
-gdt/gdt_load.o \
-gdt/gdt.o \
-idt/idt_load.o \
-idt/idt.o \
-drivers/keyboard/keyboard.o \
-drivers/Serial/URAT.o \
-drivers/mouse/mouse.o \
-drivers/Serial/libk/itoa/itoa.o \
-drivers/Serial/libk/kprintf/kprintf.o \
-memory/pmm/pmm.o \
-memory/heap/heap.o \
-GUI/fb/framebuffer.o \
-GUI/bitmap/bitmap.o \
-GUI/lvgl_manager/init_lvgl.o
+	boot/boot.o \
+	kernel/kernel.o \
+	gdt/gdt_load.o \
+	gdt/gdt.o \
+	idt/idt_load.o \
+	idt/idt.o \
+	drivers/keyboard/keyboard.o \
+	drivers/Serial/URAT.o \
+	drivers/mouse/mouse.o \
+	drivers/Serial/libk/itoa/itoa.o \
+	drivers/Serial/libk/kprintf/kprintf.o \
+	drivers/Serial/libk/tools/tools.o \
+	memory/pmm/pmm.o \
+	memory/heap/heap.o \
+	memory/paging/paging.o \
+	memory/paging/paging_asm.o \
+	GUI/fb/framebuffer.o \
+	GUI/bitmap/bitmap.o \
+	GUI/UI/UI.o \
+	GUI/lvgl_manager/init_lvgl.o
 
 # ---------------------------------------------------------
 # Bitmap image OBJECTS
 # ---------------------------------------------------------
 BMP_OBJS = \
-GUI/bitmap/bitmaps/cursor.o
+	GUI/bitmap/bitmaps/cursor.o
 
 
 # -------------------------------------------------------

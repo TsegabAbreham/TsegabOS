@@ -108,3 +108,7 @@ size_t heap_get_memory(){
 
     return total;
 }
+
+uint32_t heap_get_start() {
+    return heap_start;
+}

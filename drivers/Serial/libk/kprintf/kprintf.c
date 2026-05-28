@@ -1,5 +1,4 @@
-#include "../../drivers/Serial/URAT.h"
-
+#include <stdint.h>
 
 void kprintf(const char* fmt, ...)
 {
@@ -28,11 +27,23 @@ void kprintf(const char* fmt, ...)
             }
             else if (fmt[i] == 'x')
             {
-                int val = *(int*)arg;
-                arg += sizeof(int);
+                uint32_t val = *(uint32_t*)arg;  // unsigned!
+                arg += sizeof(uint32_t);
 
-                char buf[32];
-                itoa(val, buf); // later replace with hex version
+                // convert to hex manually
+                char buf[12];
+                char hex_chars[] = "0123456789abcdef";
+                buf[10] = '\0';
+                buf[9]  = ' ';
+
+                for (int j = 8; j >= 1; j--) {
+                    buf[j] = hex_chars[val & 0xF];
+                    val >>= 4;
+                }
+                buf[0] = '0';
+                buf[1] = 'x';
+                buf[9] = '\0';
+
                 serial_write(buf);
             }
         }

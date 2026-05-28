@@ -9,9 +9,13 @@
 
 #include "../memory/pmm/pmm.h"
 #include "../memory/heap/heap.h"
+#include "../memory/paging/paging.h"
 
 #include "../GUI/fb/framebuffer.h"
 #include "../drivers/mouse/mouse.h"
+
+// GUI Components
+#include "../GUI/UI/UI.h"
 
 #include "../drivers/Serial/libk/kprintf/kprintf.h"
 #include "../drivers/Serial/URAT.h"
@@ -22,6 +26,8 @@
 
 extern uint32_t kernel_end;
 
+
+
 // --------------------------------------------------
 // FRAMEBUFFER
 // --------------------------------------------------
@@ -30,14 +36,26 @@ static uint32_t fb_width;
 static uint32_t fb_height;
 static uint32_t fb_pitch;
 
+typedef struct {
+    uint32_t addr;
+    uint32_t size;
+} fb_info_t;
+
+fb_info_t READ_FRAMEBUFFER(multiboot_info_t* mbi) {
+    fb_info_t info;
+
+    info.addr = (uint32_t)mbi->framebuffer_addr;
+    info.size = mbi->framebuffer_pitch * mbi->framebuffer_height;
+
+    framebuffer = (uint32_t*)info.addr;
+    fb_width    = mbi->framebuffer_width;
+    fb_height   = mbi->framebuffer_height;
+    fb_pitch    = mbi->framebuffer_pitch / 4;
+
+    return info;
+}
+
 void INIT_FRAMEBUFFER(multiboot_info_t* mbi) {
-    framebuffer =
-    (uint32_t*)(uint32_t)mbi->framebuffer_addr;
-
-    fb_width  = mbi->framebuffer_width;
-    fb_height = mbi->framebuffer_height;
-
-    fb_pitch  = mbi->framebuffer_pitch / 4;
 
     framebuffer_init(
         framebuffer,
@@ -47,6 +65,8 @@ void INIT_FRAMEBUFFER(multiboot_info_t* mbi) {
     );
 
 }
+
+
 
 // --------------------------------------------------
 // LVGL MOUSE INPUT
@@ -90,6 +110,11 @@ void kernel_main(uint32_t magic,
 
     pmm_init((uint32_t)&kernel_end, mbi);
     heap_init();
+
+    fb_info_t fb = READ_FRAMEBUFFER(mbi);
+
+    paging_init((uint32_t)&kernel_end, fb.addr, fb.size);
+
 
     kprintf("Kernel starting...\n");
 
@@ -157,29 +182,10 @@ void kernel_main(uint32_t magic,
     // --------------------------------------------------
     // BUTTON TEST
     // --------------------------------------------------
-    lv_obj_t *btn =
-        lv_btn_create(lv_screen_active());
-
-    lv_obj_set_size(btn, 140, 70);
-
-    lv_obj_align(
-        btn,
-        LV_ALIGN_CENTER,
-        0,
-        0
-    );
-
-    lv_obj_t *label =
-        lv_label_create(btn);
-
-    lv_label_set_text(
-        label,
-        "HELLO OS"
-    );
-
-    lv_obj_center(label);
-
+    create_button(100, 300, 300, 400, "Test Button");
+    create_label(300, 400, "My name is Tsegab!");
     kprintf("LVGL UI created\n");
+
 
     // --------------------------------------------------
     // MAIN LOOP
@@ -189,6 +195,7 @@ void kernel_main(uint32_t magic,
         lv_tick_inc(1);
 
         lv_timer_handler();
+
 
         delay();
     }

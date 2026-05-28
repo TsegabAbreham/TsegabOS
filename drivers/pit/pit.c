@@ -17,7 +17,13 @@ void pit_init(void) {
     outb(0x40, (divisor >> 8) & 0xFF);
 }
 
-void wait_for_pit(void) {
-    while (!(inb(0x61) & 0x20));
-    while (inb(0x61) & 0x20);
-}
+
+
+
+
+
+
+// void wait_for_pit(void) {
+//     while (!(inb(0x61) & 0x20));
+//     while (inb(0x61) & 0x20);
+// }

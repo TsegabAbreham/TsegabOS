@@ -147,6 +147,21 @@ void idt_init(void) {
 
 void isr_handler(uint32_t int_number) {
 
+    // =============================
+    // ========= ISRs ==============
+    // =============================
+    // PAGE FAULT
+    if (int_number == 14) {
+        uint32_t fault_address;
+        asm volatile ("mov %%cr2, %0" : "=r"(fault_address));
+        kprintf("PAGE FAULT!");
+        kprintf("fault_address is %x\n", fault_address);
+        for (;;);
+    }
+
+    // ==============================
+    // ========== IRQs ==============
+    // ==============================
     // TIMER
     if (int_number == 32) {
         outb(0x20, 0x20);
