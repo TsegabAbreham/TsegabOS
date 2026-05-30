@@ -11,19 +11,26 @@ static inline uint8_t inb(uint16_t port) {
 }
 
 void pit_init(void) {
-    uint32_t divisor = 1193180 / 60;
+    uint32_t divisor = 1193180 / 1000;
     outb(0x43, 0x36);
     outb(0x40, divisor & 0xFF);
     outb(0x40, (divisor >> 8) & 0xFF);
 }
 
 
+volatile uint64_t timer_ticks = 0;
 
+void pit_handler() {
+    timer_ticks++;
 
+    outb(0x20, 0x20);
+}
 
+void sleep_ms(uint64_t milliseconds) {
+    uint64_t end = timer_ticks + milliseconds;
 
+    while (timer_ticks < end) {
+        asm volatile ("hlt");
+    }
+}
 
-// void wait_for_pit(void) {
-//     while (!(inb(0x61) & 0x20));
-//     while (inb(0x61) & 0x20);
-// }

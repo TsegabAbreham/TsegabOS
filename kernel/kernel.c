@@ -17,8 +17,13 @@
 // GUI Components
 #include "../GUI/UI/UI.h"
 
+// Drivers
 #include "../drivers/Serial/libk/kprintf/kprintf.h"
 #include "../drivers/Serial/URAT.h"
+
+#include "../drivers/ATA/ata.h"
+
+#include "../drivers/pit/pit.h"
 
 #include "../external/external/lvgl/lvgl.h"
 #include "../GUI/lvgl_manager/init_lvgl.h"
@@ -107,6 +112,7 @@ void kernel_main(uint32_t magic,
     gdt_init();
     idt_init();
     serial_init();
+    pit_init();
 
     pmm_init((uint32_t)&kernel_end, mbi);
     heap_init();
@@ -114,6 +120,19 @@ void kernel_main(uint32_t magic,
     fb_info_t fb = READ_FRAMEBUFFER(mbi);
 
     paging_init((uint32_t)&kernel_end, fb.addr, fb.size);
+
+    // ATA driver test
+    uint8_t write_buf[512];
+    uint8_t read_buf[512];
+
+    const char* msg = "Hello from ATA!";
+    for (int i = 0; i < 512; i++) write_buf[i] = 0;
+    for (int i = 0; msg[i]; i++) write_buf[i] = msg[i];
+
+    ata_write_sectors(1, 1, write_buf);
+    ata_read_sectors(1, 1, read_buf);
+
+
 
 
     kprintf("Kernel starting...\n");
@@ -183,7 +202,7 @@ void kernel_main(uint32_t magic,
     // BUTTON TEST
     // --------------------------------------------------
     create_button(100, 300, 300, 400, "Test Button");
-    create_label(300, 400, "My name is Tsegab!");
+    create_label(700, 800, (char*)read_buf);
     kprintf("LVGL UI created\n");
 
 
@@ -196,7 +215,5 @@ void kernel_main(uint32_t magic,
 
         lv_timer_handler();
 
-
-        delay();
     }
 }

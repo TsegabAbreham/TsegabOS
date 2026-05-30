@@ -31,9 +31,11 @@ OBJS = \
 	drivers/keyboard/keyboard.o \
 	drivers/Serial/URAT.o \
 	drivers/mouse/mouse.o \
+	drivers/pit/pit.o \
 	drivers/Serial/libk/itoa/itoa.o \
 	drivers/Serial/libk/kprintf/kprintf.o \
 	drivers/Serial/libk/tools/tools.o \
+	drivers/ATA/ata.o \
 	memory/pmm/pmm.o \
 	memory/heap/heap.o \
 	memory/paging/paging.o \
@@ -119,7 +121,7 @@ run: $(TARGET)
 	qemu-system-i386 -kernel $(TARGET)
 
 run-iso: $(ISO)
-	qemu-system-i386 -cdrom $(ISO) -m 256M
+	qemu-system-i386 -cdrom $(ISO) -m 256M -hda disk.img
 
 run-debug:
 	qemu-system-i386 -kernel $(TARGET) -serial file:log.txt

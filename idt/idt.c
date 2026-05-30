@@ -2,6 +2,7 @@
 
 #include "../drivers/Serial/libk/kprintf/kprintf.h"
 #include "../drivers/keyboard/keyboard.h"
+#include "../drivers/pit/pit.h"
 #include "../drivers/mouse/mouse.h"
 
 #define IDT_ARRAY 256
@@ -164,6 +165,8 @@ void isr_handler(uint32_t int_number) {
     // ==============================
     // TIMER
     if (int_number == 32) {
+        pit_handler();
+
         outb(0x20, 0x20);
         return;
     }

@@ -20,14 +20,10 @@
   <component name="ChangeListManager">
     <list default="true" id="79b01f66-c468-4cbc-9d73-c9a831550010" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/UI/UI.c" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/UI/UI.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/UI/UI.h" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/UI/UI.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drivers/Serial/libk/kprintf/kprintf.c" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/Serial/libk/kprintf/kprintf.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drivers/Serial/libk/kprintf/kprintf.o" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/Serial/libk/kprintf/kprintf.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drivers/Serial/libk/tools/tools.c" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/Serial/libk/tools/tools.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drivers/Serial/libk/tools/tools.h" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/Serial/libk/tools/tools.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drivers/mouse/mouse.c" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/mouse/mouse.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drivers/pit/pit.c" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/pit/pit.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drivers/pit/pit.h" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/pit/pit.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drivers/pit/pit.o" beforeDir="false" afterPath="$PROJECT_DIR$/drivers/pit/pit.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/external/external/lvgl" beforeDir="false" afterPath="$PROJECT_DIR$/external/external/lvgl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/config/lv_conf_internal.h" beforeDir="false" afterPath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/config/lv_conf_internal.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/stdlib/lv_sprintf.h" beforeDir="false" afterPath="$PROJECT_DIR$/external/external/lvgl/include/lvgl/stdlib/lv_sprintf.h" afterDir="false" />
@@ -36,10 +32,6 @@
       <change beforePath="$PROJECT_DIR$/isodir/kernel.elf" beforeDir="false" afterPath="$PROJECT_DIR$/isodir/kernel.elf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kernel/kernel.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/kernel.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kernel/kernel.o" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/kernel.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/memory/heap/heap.c" beforeDir="false" afterPath="$PROJECT_DIR$/memory/heap/heap.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/memory/heap/heap.h" beforeDir="false" afterPath="$PROJECT_DIR$/memory/heap/heap.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/memory/heap/heap.o" beforeDir="false" afterPath="$PROJECT_DIR$/memory/heap/heap.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/memory/pmm/pmm.c" beforeDir="false" afterPath="$PROJECT_DIR$/memory/pmm/pmm.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myos.elf" beforeDir="false" afterPath="$PROJECT_DIR$/myos.elf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myos.iso" beforeDir="false" afterPath="$PROJECT_DIR$/myos.iso" afterDir="false" />
     </list>
@@ -137,10 +129,16 @@
   }
 }</component>
   <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="run-iso" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="run-iso" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
     </configuration>
     <configuration name="run-iso" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
       <makefile filename="$PROJECT_DIR$/Makefile" target="run-iso" workingDirectory="" arguments="">
@@ -176,7 +174,8 @@
       <workItem from="1779868096683" duration="1808000" />
       <workItem from="1779879527715" duration="7717000" />
       <workItem from="1779904014815" duration="7131000" />
-      <workItem from="1779989082545" duration="520000" />
+      <workItem from="1779989082545" duration="3690000" />
+      <workItem from="1780160164233" duration="5024000" />
     </task>
     <servers />
   </component>
