@@ -12,14 +12,17 @@
 #include "../memory/paging/paging.h"
 
 #include "../GUI/fb/framebuffer.h"
-#include "../drivers/mouse/mouse.h"
+
 
 // GUI Components
 #include "../GUI/UI/UI.h"
+#include "../GUI/cursor/cursor.h"
 
 // Drivers
 #include "../libk/kprintf/kprintf.h"
 #include "../drivers/Serial/URAT.h"
+
+#include "../drivers/mouse/mouse.h"
 
 #include "../drivers/ATA/ata.h"
 
@@ -33,11 +36,9 @@
 // External
 #include "../external/external/lvgl/lvgl.h"
 #include "../GUI/lvgl_manager/init_lvgl.h"
-
+#include "../GUI/lvgl_manager/input/input.h"
 
 extern uint32_t kernel_end;
-
-
 
 // --------------------------------------------------
 // FRAMEBUFFER
@@ -77,31 +78,32 @@ void INIT_FRAMEBUFFER(multiboot_info_t* mbi) {
 
 }
 
+void FS_TEST() {
+    fat32_init();
+    // create a brand new file
+    int create_result = fat32_create_file("HELLO   ", "TXT");
+    uint8_t vbuf[512];
+    if (create_result == FAT32_OK) {
+        kprintf("FAT32: file created successfully\n");
 
+        // now write into it
+        fat32_file_t newfile;
+        fat32_open("HELLO   ", "TXT", &newfile);
 
-// --------------------------------------------------
-// LVGL MOUSE INPUT
-// --------------------------------------------------
-void lvgl_mouse_read(lv_indev_t * indev,
-                     lv_indev_data_t * data)
-{
-    (void)indev;
+        const uint8_t* msg = (const uint8_t*)"I was created by my own OS!";
+        uint32_t written = fat32_write(&newfile, msg, 27);
+        fat32_update_dir_entry("HELLO   ", "TXT", written, newfile.first_cluster);
 
-    data->point.x = mouse_get_x();
-    data->point.y = mouse_get_y();
+        kprintf("FAT32: wrote %u bytes to new file\n", written);
 
-    if(mouse_left_pressed())
-        data->state = LV_INDEV_STATE_PRESSED;
-    else
-        data->state = LV_INDEV_STATE_RELEASED;
-}
+        // read it back
+        fat32_file_t verify;
+        fat32_open("HELLO   ", "TXT", &verify);
 
-// --------------------------------------------------
-// SIMPLE DELAY
-// --------------------------------------------------
-void delay()
-{
-    for(volatile int i = 0; i < 100000; i++);
+        uint32_t r = fat32_read(&verify, vbuf, 512);
+        vbuf[r] = '\0';
+        kprintf("FAT32: verify: %s\n", vbuf);
+    }
 }
 
 // --------------------------------------------------
@@ -130,31 +132,7 @@ void kernel_main(uint32_t magic,
     // --------------------------------------------------
     // FS TEST
     // --------------------------------------------------
-    fat32_init();
-    // create a brand new file
-    int create_result = fat32_create_file("HELLO   ", "TXT");
-    uint8_t vbuf[512];
-    if (create_result == FAT32_OK) {
-        kprintf("FAT32: file created successfully\n");
 
-        // now write into it
-        fat32_file_t newfile;
-        fat32_open("HELLO   ", "TXT", &newfile);
-
-        const uint8_t* msg = (const uint8_t*)"I was created by my own OS!";
-        uint32_t written = fat32_write(&newfile, msg, 27);
-        fat32_update_dir_entry("HELLO   ", "TXT", written, newfile.first_cluster);
-
-        kprintf("FAT32: wrote %u bytes to new file\n", written);
-
-        // read it back
-        fat32_file_t verify;
-        fat32_open("HELLO   ", "TXT", &verify);
-
-        uint32_t r = fat32_read(&verify, vbuf, 512);
-        vbuf[r] = '\0';
-        kprintf("FAT32: verify: %s\n", vbuf);
-    }
 
     kprintf("Kernel starting...\n");
 
@@ -171,61 +149,16 @@ void kernel_main(uint32_t magic,
     // MOUSE INIT
     // --------------------------------------------------
     mouse_init(fb_width, fb_height);
+    lv_indev_t *mouse_indev = lvgl_mouse_input_init();
+    cursor_init(mouse_indev);
 
-    // --------------------------------------------------
-    // INPUT DEVICE
-    // --------------------------------------------------
-    lv_indev_t *mouse_indev =
-        lv_indev_create();
-
-    lv_indev_set_type(
-        mouse_indev,
-        LV_INDEV_TYPE_POINTER
-    );
-
-    lv_indev_set_read_cb(
-        mouse_indev,
-        lvgl_mouse_read
-    );
-
-    // --------------------------------------------------
-    // CURSOR
-    // --------------------------------------------------
-    lv_obj_t *cursor =
-        lv_obj_create(lv_screen_active());
-
-    lv_obj_set_size(cursor, 12, 12);
-
-    lv_obj_set_style_radius(
-        cursor,
-        LV_RADIUS_CIRCLE,
-        0
-    );
-
-    lv_obj_set_style_bg_color(
-        cursor,
-        lv_color_hex(0xFFFFFF),
-        0
-    );
-
-    lv_obj_set_style_border_width(
-        cursor,
-        0,
-        0
-    );
-
-    lv_indev_set_cursor(
-        mouse_indev,
-        cursor
-    );
 
     // --------------------------------------------------
     // BUTTON TEST
     // --------------------------------------------------
     create_button(100, 300, 300, 400, "Test Button");
-    create_label(700, 800, (char*)vbuf);
+    create_label(700, 800, (char*)"This is working!!!!");
     kprintf("LVGL UI created\n");
-
 
     // --------------------------------------------------
     // MAIN LOOP

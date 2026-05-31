@@ -2,6 +2,10 @@
 #include <stdint.h>
 
 
+void map(int ) {
+
+}
+
 void create_label(uint32_t x, uint32_t y, char *text) {
     lv_obj_t *label = lv_label_create(lv_scr_act());
 

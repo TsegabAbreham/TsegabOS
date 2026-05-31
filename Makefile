@@ -74,6 +74,8 @@ GUI_OBJ = \
 	GUI/bitmap/bitmap.o \
 	GUI/UI/UI.o \
 	GUI/lvgl_manager/init_lvgl.o \
+	GUI/lvgl_manager/input/input.o \
+	GUI/cursor/cursor.o \
 
 # ---------------------------------------------------------
 # File System

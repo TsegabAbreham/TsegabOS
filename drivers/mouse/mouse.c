@@ -1,7 +1,7 @@
 #include <stdint.h>
 
 #include "../../GUI/bitmap/bitmap.h"
-#include "../../drivers/Serial/libk/kprintf/kprintf.h"
+#include "../../libk/kprintf/kprintf.h"
 
 static int mouse_x = 200;
 static int mouse_y = 200;
@@ -98,6 +98,7 @@ void mouse_init(uint32_t fb_width, uint32_t fb_height) {
     // ACK
     mouse_read();
 
+
 }
 
 static uint8_t right_down = 0;
@@ -161,9 +162,6 @@ void mouse_process_byte(uint8_t data) {
         }
         middle_down = 0;
     }
-
-
-
 }
 
 void mouse_handler(void) {
