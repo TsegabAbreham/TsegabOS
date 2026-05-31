@@ -55,6 +55,7 @@ LIBK_OBJ = \
 	libk/itoa/itoa.o \
 	libk/kprintf/kprintf.o \
 	libk/tools/tools.o \
+	libk/string/string.o \
 
 # ---------------------------------------------------------
 # Memory
@@ -83,13 +84,6 @@ GUI_OBJ = \
 FS_OBJ = \
 	FS/FAT32/fat32.o \
 
-# ---------------------------------------------------------
-# Bitmap image OBJECTS
-# ---------------------------------------------------------
-BMP_OBJS = \
-	GUI/bitmap/bitmaps/cursor.o
-
-
 # -------------------------------------------------------
 # FIXED LVGL PATH (IMPORTANT)
 # -------------------------------------------------------
@@ -113,8 +107,6 @@ OBJS += $(GUI_OBJ)
 OBJS += $(FS_OBJ)
 
 OBJS += $(LVGL_OBJS)
-
-OBJS += $(BMP_OBJS)
 
 # -------------------------------------------------------
 # BUILD RULES

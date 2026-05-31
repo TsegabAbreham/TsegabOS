@@ -59,9 +59,6 @@ static uint8_t mouse_read(void) {
     return inb(0x60);
 }
 
-extern uint8_t _binary_GUI_bitmap_bitmaps_Cursor_bmp_start[];
-static bitmap_t cursor;
-
 void mouse_init(uint32_t fb_width, uint32_t fb_height) {
 
     screen_width  = fb_width;
@@ -89,8 +86,6 @@ void mouse_init(uint32_t fb_width, uint32_t fb_height) {
 
     mouse_wait(1);
     outb(0x60, status);
-
-    cursor = load_bmp(_binary_GUI_bitmap_bitmaps_Cursor_bmp_start);
 
     // enable packet streaming
     mouse_write(0xF4);

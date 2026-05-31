@@ -18,9 +18,13 @@
 #include "../GUI/UI/UI.h"
 #include "../GUI/cursor/cursor.h"
 
-// Drivers
+// LIBK
 #include "../libk/kprintf/kprintf.h"
+#include "../libk/string/string.h"
+
+// Drivers
 #include "../drivers/Serial/URAT.h"
+
 
 #include "../drivers/mouse/mouse.h"
 
@@ -80,7 +84,7 @@ void INIT_FRAMEBUFFER(multiboot_info_t* mbi) {
 
 void FS_TEST() {
     fat32_init();
-    // create a brand new file
+    // create a brand-new file
     int create_result = fat32_create_file("HELLO   ", "TXT");
     uint8_t vbuf[512];
     if (create_result == FAT32_OK) {
@@ -144,6 +148,7 @@ void kernel_main(uint32_t magic,
 
     // LVGL INIT
     LVGL_INIT(framebuffer, fb_width, fb_height, fb_pitch);
+    ui_init(fb_width, fb_height);
 
     // --------------------------------------------------
     // MOUSE INIT
@@ -157,7 +162,16 @@ void kernel_main(uint32_t magic,
     // BUTTON TEST
     // --------------------------------------------------
     create_button(100, 300, 300, 400, "Test Button");
-    create_label(700, 800, (char*)"This is working!!!!");
+
+
+    char buf[16];
+    char buf1[16];
+    uint_to_str(fb_width, buf);
+    uint_to_str(fb_height, buf1);
+    create_label(700, 300, buf);
+    create_label(800, 300, buf1);
+
+
     kprintf("LVGL UI created\n");
 
     // --------------------------------------------------
