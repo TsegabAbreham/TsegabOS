@@ -45,6 +45,7 @@ DRIVERS_OBJS = \
 	drivers/mouse/mouse.o \
 	drivers/pit/pit.o \
 	drivers/ATA/ata.o \
+	drivers/CMOS/cmos.o \
 
 
 # ---------------------------------------------------------
@@ -165,8 +166,6 @@ run: $(TARGET)
 
 run-iso: $(ISO)
 	qemu-system-i386 -cdrom $(ISO) -m 256M -hda disk.img -boot d -serial stdio
-
-
 
 # -------------------------------------------------------
 # CLEAN

@@ -4,8 +4,8 @@
 
 #include "multiboot.h"
 
-#include "../gdt/gdt.h"
-#include "../idt/idt.h"
+#include "gdt/gdt.h"
+#include "idt/idt.h"
 
 #include "../memory/pmm/pmm.h"
 #include "../memory/heap/heap.h"
@@ -18,12 +18,14 @@
 #include "../GUI/UI/UI.h"
 
 // Drivers
-#include "../drivers/Serial/libk/kprintf/kprintf.h"
+#include "../libk/kprintf/kprintf.h"
 #include "../drivers/Serial/URAT.h"
 
 #include "../drivers/ATA/ata.h"
 
 #include "../drivers/pit/pit.h"
+
+#include "../drivers/CMOS/cmos.h"
 
 // File system
 #include "../FS/FAT32/fat32.h"
@@ -125,12 +127,9 @@ void kernel_main(uint32_t magic,
 
     paging_init((uint32_t)&kernel_end, fb.addr, fb.size);
 
-
-
-
-    // FS test
-    // open the file for writing
-
+    // --------------------------------------------------
+    // FS TEST
+    // --------------------------------------------------
     fat32_init();
     // create a brand new file
     int create_result = fat32_create_file("HELLO   ", "TXT");
@@ -156,10 +155,6 @@ void kernel_main(uint32_t magic,
         vbuf[r] = '\0';
         kprintf("FAT32: verify: %s\n", vbuf);
     }
-
-
-
-
 
     kprintf("Kernel starting...\n");
 
