@@ -23,28 +23,62 @@ LIMINE_DIR = limine
 # -------------------------------------------------------
 OBJS = \
 	boot/boot.o \
+
+
+# ---------------------------------------------------------
+# Kernel
+# ---------------------------------------------------------
+KERNEL_OBJS = \
 	kernel/kernel.o \
-	gdt/gdt_load.o \
-	gdt/gdt.o \
-	idt/idt_load.o \
-	idt/idt.o \
+    kernel/gdt/gdt_load.o \
+    kernel/gdt/gdt.o \
+    kernel/idt/idt_load.o \
+    kernel/idt/idt.o \
+
+
+# ---------------------------------------------------------
+# Drivers
+# ---------------------------------------------------------
+DRIVERS_OBJS = \
 	drivers/keyboard/keyboard.o \
 	drivers/Serial/URAT.o \
 	drivers/mouse/mouse.o \
 	drivers/pit/pit.o \
-	drivers/Serial/libk/itoa/itoa.o \
-	drivers/Serial/libk/kprintf/kprintf.o \
-	drivers/Serial/libk/tools/tools.o \
 	drivers/ATA/ata.o \
+
+
+# ---------------------------------------------------------
+# OS Library
+# ---------------------------------------------------------
+LIBK_OBJ = \
+	libk/itoa/itoa.o \
+	libk/kprintf/kprintf.o \
+	libk/tools/tools.o \
+
+# ---------------------------------------------------------
+# Memory
+# ---------------------------------------------------------
+MEMORY_OBJ = \
 	memory/pmm/pmm.o \
-	memory/heap/heap.o \
-	memory/paging/paging.o \
-	memory/paging/paging_asm.o \
+    memory/heap/heap.o \
+    memory/paging/paging.o \
+    memory/paging/paging_asm.o \
+
+
+# ---------------------------------------------------------
+# GUI
+# ---------------------------------------------------------
+GUI_OBJ = \
 	GUI/fb/framebuffer.o \
 	GUI/bitmap/bitmap.o \
 	GUI/UI/UI.o \
 	GUI/lvgl_manager/init_lvgl.o \
-	FS/FAT32/fat32.o
+
+# ---------------------------------------------------------
+# File System
+# ---------------------------------------------------------
+FS_OBJ = \
+	FS/FAT32/fat32.o \
 
 # ---------------------------------------------------------
 # Bitmap image OBJECTS
@@ -67,9 +101,17 @@ LVGL_SRC = $(wildcard external/external/lvgl/src/*.c) \
 
 LVGL_OBJS = $(LVGL_SRC:.c=.o)
 
-OBJS += $(LVGL_OBJS)
-OBJS += $(BMP_OBJS)
 
+OBJS += $(KERNEL_OBJS)
+OBJS += $(DRIVERS_OBJS)
+OBJS += $(LIBK_OBJ)
+OBJS += $(MEMORY_OBJ)
+OBJS += $(GUI_OBJ)
+OBJS += $(FS_OBJ)
+
+OBJS += $(LVGL_OBJS)
+
+OBJS += $(BMP_OBJS)
 
 # -------------------------------------------------------
 # BUILD RULES
@@ -122,7 +164,7 @@ run: $(TARGET)
 	qemu-system-i386 -kernel $(TARGET)
 
 run-iso: $(ISO)
-	qemu-system-i386 -cdrom $(ISO) -m 256M -hda QEMU_TEST/disk.img -boot d -serial stdio
+	qemu-system-i386 -cdrom $(ISO) -m 256M -hda disk.img -boot d -serial stdio
 
 
 

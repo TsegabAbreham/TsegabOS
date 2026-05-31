@@ -143,4 +143,15 @@ int      fat32_open(const char* name, const char* ext, fat32_file_t* out_file);
 // Returns number of bytes actually read
 uint32_t fat32_read(fat32_file_t* file, uint8_t* buffer, uint32_t size);
 
+
+uint32_t fat32_find_free_cluster(void);
+
+int      fat32_write_fat_entry(uint32_t cluster, uint32_t value);
+
+uint32_t fat32_write(fat32_file_t* file, const uint8_t* buffer, uint32_t size);
+
+int      fat32_update_dir_entry(const char* name, const char* ext, uint32_t new_size, uint32_t first_cluster);
+
+int fat32_create_file(const char* name, const char* ext);
+
 #endif

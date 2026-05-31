@@ -125,20 +125,41 @@ void kernel_main(uint32_t magic,
 
     paging_init((uint32_t)&kernel_end, fb.addr, fb.size);
 
+
+
+
     // FS test
-    uint8_t file_buf[512];
+    // open the file for writing
 
     fat32_init();
+    // create a brand new file
+    int create_result = fat32_create_file("HELLO   ", "TXT");
+    uint8_t vbuf[512];
+    if (create_result == FAT32_OK) {
+        kprintf("FAT32: file created successfully\n");
 
-    fat32_file_t file;
-    int result = fat32_open("TEST   ", "TXT", &file);
+        // now write into it
+        fat32_file_t newfile;
+        fat32_open("HELLO   ", "TXT", &newfile);
 
-    if (result == FAT32_OK) {
-        fat32_read(&file, file_buf, 512);
-        kprintf("FAT32 file contents: %s\n", file_buf);
-    } else {
-        kprintf("FAT32: failed to open file\n");
+        const uint8_t* msg = (const uint8_t*)"I was created by my own OS!";
+        uint32_t written = fat32_write(&newfile, msg, 27);
+        fat32_update_dir_entry("HELLO   ", "TXT", written, newfile.first_cluster);
+
+        kprintf("FAT32: wrote %u bytes to new file\n", written);
+
+        // read it back
+        fat32_file_t verify;
+        fat32_open("HELLO   ", "TXT", &verify);
+
+        uint32_t r = fat32_read(&verify, vbuf, 512);
+        vbuf[r] = '\0';
+        kprintf("FAT32: verify: %s\n", vbuf);
     }
+
+
+
+
 
     kprintf("Kernel starting...\n");
 
@@ -207,7 +228,7 @@ void kernel_main(uint32_t magic,
     // BUTTON TEST
     // --------------------------------------------------
     create_button(100, 300, 300, 400, "Test Button");
-    create_label(700, 800, (char*)file_buf);
+    create_label(700, 800, (char*)vbuf);
     kprintf("LVGL UI created\n");
 
 
