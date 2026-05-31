@@ -56,5 +56,6 @@ dkms.conf
 
 *.idea/
 *.img
+*.iso
 
 QEMU_TEST/
