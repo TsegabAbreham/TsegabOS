@@ -25,6 +25,10 @@
 
 #include "../drivers/pit/pit.h"
 
+// File system
+#include "../FS/FAT32/fat32.h"
+
+// External
 #include "../external/external/lvgl/lvgl.h"
 #include "../GUI/lvgl_manager/init_lvgl.h"
 
@@ -121,19 +125,20 @@ void kernel_main(uint32_t magic,
 
     paging_init((uint32_t)&kernel_end, fb.addr, fb.size);
 
-    // ATA driver test
-    uint8_t write_buf[512];
-    uint8_t read_buf[512];
+    // FS test
+    uint8_t file_buf[512];
 
-    const char* msg = "Hello from ATA!";
-    for (int i = 0; i < 512; i++) write_buf[i] = 0;
-    for (int i = 0; msg[i]; i++) write_buf[i] = msg[i];
+    fat32_init();
 
-    ata_write_sectors(1, 1, write_buf);
-    ata_read_sectors(1, 1, read_buf);
+    fat32_file_t file;
+    int result = fat32_open("TEST   ", "TXT", &file);
 
-
-
+    if (result == FAT32_OK) {
+        fat32_read(&file, file_buf, 512);
+        kprintf("FAT32 file contents: %s\n", file_buf);
+    } else {
+        kprintf("FAT32: failed to open file\n");
+    }
 
     kprintf("Kernel starting...\n");
 
@@ -202,7 +207,7 @@ void kernel_main(uint32_t magic,
     // BUTTON TEST
     // --------------------------------------------------
     create_button(100, 300, 300, 400, "Test Button");
-    create_label(700, 800, (char*)read_buf);
+    create_label(700, 800, (char*)file_buf);
     kprintf("LVGL UI created\n");
 
 

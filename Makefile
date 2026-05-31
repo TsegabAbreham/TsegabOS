@@ -43,7 +43,8 @@ OBJS = \
 	GUI/fb/framebuffer.o \
 	GUI/bitmap/bitmap.o \
 	GUI/UI/UI.o \
-	GUI/lvgl_manager/init_lvgl.o
+	GUI/lvgl_manager/init_lvgl.o \
+	FS/FAT32/fat32.o
 
 # ---------------------------------------------------------
 # Bitmap image OBJECTS
@@ -121,10 +122,8 @@ run: $(TARGET)
 	qemu-system-i386 -kernel $(TARGET)
 
 run-iso: $(ISO)
-	qemu-system-i386 -cdrom $(ISO) -m 256M -hda disk.img
+	qemu-system-i386 -cdrom $(ISO) -m 256M -hda QEMU_TEST/disk.img -boot d -serial stdio
 
-run-debug:
-	qemu-system-i386 -kernel $(TARGET) -serial file:log.txt
 
 
 # -------------------------------------------------------
