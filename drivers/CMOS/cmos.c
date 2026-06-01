@@ -16,13 +16,18 @@ uint8_t cmos_read(uint8_t reg) {
     return inb(0x71);
 }
 
+// Convert BCD byte to normal decimal
+static uint8_t bcd_to_dec(uint8_t bcd) {
+    return ((bcd >> 4) * 10) + (bcd & 0x0F);
+}
+
 void cmos_get_rtc(rtc_info_t *rtc) {
-    rtc->second = cmos_read(SEC);
-    rtc->minute = cmos_read(MIN);
-    rtc->hour = cmos_read(HOUR);
-    rtc->weekday = cmos_read(WEEKDAY);
-    rtc->day_of_month = cmos_read(DAYOFMONTH);
-    rtc->month = cmos_read(MONTH);
-    rtc->year = cmos_read(YEAR);
-    rtc->century = cmos_read(CENTURY);
+    rtc->second = bcd_to_dec(cmos_read(SEC));
+    rtc->minute = bcd_to_dec(cmos_read(MIN));
+    rtc->hour = bcd_to_dec(cmos_read(HOUR));
+    rtc->weekday = bcd_to_dec(cmos_read(WEEKDAY));
+    rtc->day_of_month = bcd_to_dec(cmos_read(DAYOFMONTH));
+    rtc->month = bcd_to_dec(cmos_read(MONTH));
+    rtc->year = bcd_to_dec(cmos_read(YEAR));
+    rtc->century = bcd_to_dec(cmos_read(CENTURY));
 }

@@ -3,3 +3,4 @@
 #include "../../../drivers/mouse/mouse.h"
 
 lv_indev_t* lvgl_mouse_input_init(void);
+lv_indev_t* lvgl_keyboard_input_init(void);

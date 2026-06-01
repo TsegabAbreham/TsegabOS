@@ -79,6 +79,14 @@ GUI_OBJ = \
 	GUI/cursor/cursor.o \
 
 # ---------------------------------------------------------
+# Desktop
+# ---------------------------------------------------------
+DESKTOP_OBJ = \
+	GUI/Desktop/desktop.o \
+	GUI/Desktop/taskbar/taskbar.o \
+	GUI/Desktop/icons/icon.o \
+
+# ---------------------------------------------------------
 # File System
 # ---------------------------------------------------------
 FS_OBJ = \
@@ -104,7 +112,9 @@ OBJS += $(DRIVERS_OBJS)
 OBJS += $(LIBK_OBJ)
 OBJS += $(MEMORY_OBJ)
 OBJS += $(GUI_OBJ)
+OBJS += $(DESKTOP_OBJ)
 OBJS += $(FS_OBJ)
+
 
 OBJS += $(LVGL_OBJS)
 

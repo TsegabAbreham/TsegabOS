@@ -27,6 +27,7 @@
 
 
 #include "../drivers/mouse/mouse.h"
+#include "../drivers/keyboard/keyboard.h"
 
 #include "../drivers/ATA/ata.h"
 
@@ -36,6 +37,9 @@
 
 // File system
 #include "../FS/FAT32/fat32.h"
+
+// Desktop
+#include "../GUI/Desktop/Desktop.h"
 
 // External
 #include "../external/external/lvgl/lvgl.h"
@@ -157,19 +161,10 @@ void kernel_main(uint32_t magic,
     lv_indev_t *mouse_indev = lvgl_mouse_input_init();
     cursor_init(mouse_indev);
 
-
-    // --------------------------------------------------
-    // BUTTON TEST
-    // --------------------------------------------------
-    create_button(100, 300, 300, 400, "Test Button");
+    keyboard_init();
 
 
-    char buf[16];
-    char buf1[16];
-    uint_to_str(fb_width, buf);
-    uint_to_str(fb_height, buf1);
-    create_label(700, 300, buf);
-    create_label(800, 300, buf1);
+    desktop_init(fb_width, fb_height);
 
 
     kprintf("LVGL UI created\n");
